@@ -160,32 +160,32 @@ namespace SmartHotelBookingSystem.BusinessLogicLayer
             return dt;
         }
 
-        //public List<Hotel> ConvertDataTableToList(DataTable dataTable)
-        //{
-        //    var hotelList = new List<Hotel>();
-        //    foreach (DataRow row in dataTable.Rows)
-        //    {
-        //        try
-        //        {
-        //            var hotel = new Hotel
-        //            {
-        //                HotelID = row.Field<int?>("HotelID") ?? 0,
-        //                Name = row.Field<string>("Name") ?? string.Empty,
-        //                Location = row.Field<string>("Location") ?? string.Empty,
-        //                ManagerID = row.Field<int?>("ManagerID") ?? 0,
-        //                Amenities = row.Field<string>("Amenities") ?? string.Empty,
-        //                Rating = row.Field<double?>("Rating") ?? 0,
-        //                IsActive = row.Field<bool?>("IsActive") ?? false
-        //            };
-        //            hotelList.Add(hotel);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            throw new Exception($"Error converting DataRow to Hotel: {ex.Message}", ex);
-        //        }
-        //    }
-        //    return hotelList;
-        //}
+        public List<Hotel> ConvertDataTableToList(DataTable dataTable)
+        {
+            var hotelList = new List<Hotel>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                try
+                {
+                    var hotel = new Hotel
+                    {
+                        HotelID = row.Field<int?>("HotelID") ?? 0,
+                        Name = row.Field<string>("Name") ?? string.Empty,
+                        Location = row.Field<string>("Location") ?? string.Empty,
+                        ManagerID = row.Field<int?>("ManagerID") ?? 0,
+                        Amenities = row.Field<string>("Amenities") ?? string.Empty,
+                        Rating = row.Field<double?>("Rating") ?? 0,
+                        IsActive = row.Field<bool?>("IsActive") ?? false
+                    };
+                    hotelList.Add(hotel);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Error converting DataRow to Hotel: {ex.Message}", ex);
+                }
+            }
+            return hotelList;
+        }
 
         public List<Hotel> GetAllHotels()
         {
