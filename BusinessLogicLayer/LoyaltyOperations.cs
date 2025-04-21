@@ -24,10 +24,29 @@ namespace SmartHotelBookingSystem.BusinessLogicLayer
             _context.SaveChanges();
         }
 
+        // Add points to the loyaltyAccount
+        public void AddPointsToLoyaltyAccount(int loyaltyId, int points)
+        {
+            var account = _context.LoyaltyAccounts.FirstOrDefault(l => l.LoyaltyID == loyaltyId && l.IsActive);
+            if (account != null)
+            {
+                account.PointsBalance += points;
+                account.LastUpdated = DateTime.UtcNow;
+                _context.SaveChanges();
+            }
+        }
+
+
         // Read all LoyaltyAccounts
         public List<LoyaltyAccount> GetAllLoyaltyAccounts()
         {
             return _context.LoyaltyAccounts.Where(l => l.IsActive).ToList();
+        }
+
+        // Read LoyaltyAccount details using UserID
+        public List<LoyaltyAccount> GetLoyaltyAccountsByUserId(int userId)
+        {
+            return _context.LoyaltyAccounts.Where(l => l.UserID == userId && l.IsActive).ToList();
         }
 
         // Read a LoyaltyAccount by ID
@@ -49,6 +68,20 @@ namespace SmartHotelBookingSystem.BusinessLogicLayer
             }
         }
 
+        //Redeem the loyaltyaccount points
+        public bool RedeemPointsFromLoyaltyAccount(int loyaltyId, int points)
+        {
+            var account = _context.LoyaltyAccounts.FirstOrDefault(l => l.LoyaltyID == loyaltyId && l.IsActive);
+            if (account != null && account.PointsBalance >= points)
+            {
+                account.PointsBalance -= points;
+                account.LastUpdated = DateTime.UtcNow;
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        
         // Mark a LoyaltyAccount as inactive
         public bool DeleteLoyaltyAccount(int loyaltyId)
         {
@@ -61,6 +94,29 @@ namespace SmartHotelBookingSystem.BusinessLogicLayer
             }
             return false;
         }
+        // Reactivate the loyalty account by loyaltyId
+        public bool ActivateLoyaltyAccount(int loyaltyId)
+        {
+            var account = _context.LoyaltyAccounts.Find(loyaltyId);
+            if (account != null && !account.IsActive)
+            {
+                account.IsActive = true;
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
+        }
+        // Get all in-active loyalty accounts
+        public List<LoyaltyAccount> GetInactiveLoyaltyAccounts()
+        {
+            return _context.LoyaltyAccounts.Where(l => !l.IsActive).ToList();
+        }
+        // get loyaltyAccount details within a specific range
+        public List<LoyaltyAccount> GetLoyaltyAccountsByPointsRange(int minPoints, int maxPoints)
+        {
+            return _context.LoyaltyAccounts.Where(l => l.PointsBalance >= minPoints && l.PointsBalance <= maxPoints && l.IsActive).ToList();
+        }
+
     }
     #endregion
 }
